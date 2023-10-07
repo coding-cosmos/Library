@@ -1,0 +1,153 @@
+*{
+    font-family: 'Poppins', sans-serif;
+}
+
+.container{
+    height: 100vh;
+    display: grid;
+    grid-template-rows: 1fr 6fr 1fr;
+    grid-template-columns: 1fr 5fr 1fr; 
+}
+
+
+.nav{
+    grid-row: 1/1;
+    grid-column: 2/3 ;
+}
+.nav nav{
+    font-size: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.nav nav .logo{
+    font-size: 48px;
+    font-family:    'Exo 2', sans-serif;
+}
+.nav nav ul{
+    margin: 0;
+    display: flex;
+    list-style: none;
+    gap: 32px;
+}
+
+
+.main{
+    grid-row: 2/2;
+    grid-column: 2/3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 48px;
+}
+.main #new-book{
+    font-size: 24px;
+    min-width: 15vw;
+    border: 2px solid black;
+    border-radius: 48px;
+    padding: 16px;
+
+}
+.main .cards{
+    align-self: flex-start  ;
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+}
+.card{
+    border: 2px solid black;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+    gap: 16px;
+    border-radius: 16px;
+    box-shadow: 1px 1px 2px ;
+}
+.card .info{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    /* border: 2px solid black; */
+    min-width: 150px;
+    padding: 8px;
+}
+.card .info button{
+  min-width: 150px;
+  padding: 8px;
+  border: 2px solid black   ;
+  border-radius: 16px;
+
+}
+.card .info>div:first-child{
+   font-size: 24px;
+   background-color: #efefef;
+   min-width: 150px;
+   text-align: center;
+   padding: 4px;
+   border-radius: 8px;
+   border: 2px solid black;
+}
+.card .info>div:nth-child(2){
+   font-size: 16px;
+  
+}
+.card .index{
+    align-self: flex-start;
+}
+.card .remove {
+    align-self: flex-end;
+}
+.card .remove button {
+    border: none;
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 48px;
+}
+
+
+.footer{
+    grid-row: 3/3;
+    grid-column: 1/4;
+    margin: 32px auto;
+    align-self: center;
+    background-color: #efefef;
+    padding: 8px;
+}
+
+.error{
+    border: none;
+    outline: 1px solid red;
+}
+
+.success{
+    border: none;
+    outline: 2px solid green;
+}
+.message{
+    color: red;
+}
+
+.dialog-body{
+    border-radius: ;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+.dialog-body form{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+}
+.dialog-body .form-field label{
+    min-width: 20vw;
+}
+.dialog-body .form-field{
+    min-width: 50vw;
+    display: flex;
+    gap: 4px;
+}

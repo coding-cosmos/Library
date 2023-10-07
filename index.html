@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library</title>
+    <link rel="stylesheet" href="normalize.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins&family=Roboto&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2&display=swap" rel="stylesheet">
+   
+    <script src="book.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <div class="nav">
+            <nav>
+                <div class="logo">Library</div>
+                <ul>
+                    <li>Home</li>
+                    <li>About Us</li>
+                    <li>Contact Us</li>
+                </ul>
+            </nav>
+        </div>
+        <div class="main">
+            <div class="book-ops">
+                <div class="add">
+                    <button id="new-book">New Book</button>
+                    <dialog id="book-details-dialog" >
+                        <div class="dialog-body">
+                            <p>Enter the book details</p>
+                            <form action="" id="book-details-form">
+                               <div class="form-field">
+                                   <label for="title">Book title</label>
+                                   <input type="text" id="title" >
+                                   <div class="message"></div>
+                               </div>
+                               <div class="form-field">
+                                   <label for="author">Author Name</label>
+                                   <input type="text" id="author" >
+                                   <div class="message"></div>
+                               </div>
+                               <div class="form-field">
+                                   <label for="pages">Pages</label>
+                                   <input type="number" id="pages" >
+                                   <div class="message"></div>
+                               </div>
+                               <div class="form-field">
+                                <label for="read">Have you read the book?</label>
+                                <input type="checkbox" id="read">
+                               </div>
+                            
+                               </fieldset>
+                               <button type="submit" id="add-book">Add Book</button>
+                            </form>
+                            <button id="cancel">Cancel</button>
+                        </div>
+                    </dialog>
+                </div>
+            </div>
+            <div class="cards">
+    
+                   
+            </div>
+        </div>
+        <div class="footer">
+            Copyright &copy; 2023   
+        </div>
+    </div>
+</body>
+</html>
