@@ -1,37 +1,41 @@
+class Library {
+  static books = [];
+
+  static addBook(book) {
+    this.books.push(book);
+    console.log(Library.books);
+  }
+}
+
 class Book {
   constructor(title, author, pages, read) {
-    this.myLibrary = [];
     this.title = title;
     this.author = author;
     this.pages = pages;
     this.read = read;
-    this.info = function () {
-      if (this.read == false) {
-        this.readInfo = "not read yet";
-      } else if (this.read == true) {
-        this.readInfo = "have read";
-      }
-      return `${this.title} by ${this.author}, ${this.pages} pages, ${this.readInfo}`;
-    };
   }
 }
 
 class bookModal {
   constructor() {
-    this.#cacheDom();
-    this.form = new bookDetailForm();
-    this.#modalControls();
+    this.#cacheDOM();
+    this.#modalControl();
       this.#addBook();
+      this.card = new Card();
   }
-
-  #cacheDom() {
+  #cacheDOM() {
     this.bookDetailsDialog = document.getElementById("book-details-dialog");
     this.newBookButton = document.getElementById("new-book");
     this.addBookButton = document.getElementById("add-book");
+    this.bookDetailsForm = document.getElementById("book-details-form");
     this.cancelButton = document.getElementById("cancel");
+    this.titleInput = this.bookDetailsForm.elements["title"];
+    this.authorInput = this.bookDetailsForm.elements["author"];
+    this.pagesInput = this.bookDetailsForm.elements["pages"];
+    this.read = this.bookDetailsForm.elements["read"];
   }
 
-  #modalControls() {
+  #modalControl() {
     // Open book details dialog
     this.newBookButton.addEventListener("click", () => {
       this.bookDetailsDialog.showModal();
@@ -39,58 +43,76 @@ class bookModal {
 
     // close the book details dialog
     this.cancelButton.addEventListener("click", () => {
-      this.form.resetForm();
+      this.#resetForm();
       this.bookDetailsDialog.close();
     });
   }
 
-    #addBook() {
-       this.addBookButton.addEventListener("click", addBookToLibrary);
-    function addBookToLibrary (event) {
-        event.preventDefault();
-        console.log(this.form);
-      this.data = this.form.getValues();
-      this.form.resetForm();
-      this.bookDetailsDialog.close();
-    };
-   
+  #addBook() {
+    this.addBookButton.addEventListener("click", (event) => {
+      // prevent the default behavior
+      event.preventDefault();
+
+      // add book if form is valid
+      if (this.#validateForm()) {
+        const book = new Book(
+          this.titleInput.value,
+          this.authorInput.value,
+          this.pagesInput.value,
+          this.read.checked
+        );
+        Library.addBook(book);
+
+        this.card.createCard(book, Library.books.length);
+
+        this.#resetForm();
+        // close the book details dialog
+        this.bookDetailsDialog.close();
+      }
+    });
   }
 
-  getData() {
-    return this.data;
-  }
-}
-
-class bookDetailForm {
-  constructor() {
-      this.#cacheDOM();
-  }
-
-  #cacheDOM() {
-    this.bookDetailsForm = document.getElementById("book-details-form");
+  // reset form
+  #resetForm() {
+    this.bookDetailsForm.reset();
     this.titleInput = this.bookDetailsForm.elements["title"];
     this.authorInput = this.bookDetailsForm.elements["author"];
     this.pagesInput = this.bookDetailsForm.elements["pages"];
-    this.title = this.titleInput.value;
-    this.author = this.authorInput.value;
-    this.pages = this.pagesInput.value;
-    this.read = this.bookDetailsForm.elements["read"].checked;
+
+    this.titleInput.className = "";
+    this.authorInput.className = "";
+    this.pagesInput.className = "";
+    this.#removeMessage(this.titleInput);
+    this.#removeMessage(this.authorInput);
+    this.#removeMessage(this.pagesInput);
   }
 
+  // remove error message
+  #removeMessage(element) {
+    const message = element.parentNode.querySelector(".message");
+    message.innerText = "";
+  }
+  // check if input is empty or not
+  #checkEmpty(element) {
+    if (element.value == "") {
+      element.className = "error";
+      showMessage(element);
+      return false;
+    } else {
+      element.className = "success";
+      this.#removeMessage(element);
+      return true;
+    }
+  }
   #validateForm() {
-    checkEmpty = (element) => {
-      if (element.value == "") {
-        element.className = "error";
-        this.#showMessage(element);
-        return false;
-      } else {
-        element.className = "success";
-        this.#removeMessage(element);
-        return true;
-      }
-    };
+    // show error message
+    function showMessage(element) {
+      const message = element.parentNode.querySelector(".message");
+      message.innerText = "can't be empty";
+    }
 
-    checkValue = (element) => {
+    // check if value in  number input is correct or not
+    function checkValue(element) {
       const message = element.parentNode.querySelector(".message");
       if (element.value == "") {
         element.className = "error";
@@ -105,103 +127,24 @@ class bookDetailForm {
         message.innerText = "";
         return true;
       }
-    };
-
+    }
     return (
-      checkEmpty(this.titleInput) &
-      checkEmpty(this.authorInput) &
+      this.#checkEmpty(this.titleInput) &
+      this.#checkEmpty(this.authorInput) &
       checkValue(this.pagesInput)
     );
   }
-
-  resetForm() {
-    this.bookDetailsForm.reset();
-
-    this.titleInput.className = "";
-    this.authorInput.className = "";
-    this.pagesInput.className = "";
-
-    this.#removeMessage(this.titleInput);
-    this.#removeMessage(this.authorInput);
-    this.#removeMessage(this.pagesInput);
-  }
-  // show error message
-  #showMessage(element) {
-    const message = element.parentNode.querySelector(".message");
-    message.innerText = "can't be empty";
-  }
-
-  // remove error message
-  #removeMessage(element) {
-    const message = element.parentNode.querySelector(".message");
-    message.innerText = "";
-  }
-
-  getValues() {
-    
-      return {
-        title,
-        author,
-        pages,
-        read,
-      };
-    
-  }
 }
 
-class bookCard {
-  constructor(book) {
-    this.#cacheDOM();
-      this.book = book;
-      this.createCard();
-  }
-  #cacheDOM() {
-    this.cards = document.querySelector(".cards");
-    this.toggleReadButtons = document.querySelectorAll(".toggle-read");
-    this.removeBookButtons = document.querySelectorAll(".remove");
-  }
-
-  #toggleRead(event) {
-    const element = event.srcElement;
-    const parentElement = element.parentNode.parentNode;
-    const index = parentElement.querySelector(".index").innerHTML;
-
-    if (element.innerHTML == "Not Read") {
-      element.innerHTML = "Read";
-      this.book.myLibrary[index].read = true;
-    } else {
-      element.innerHTML = "Not Read";
-      this.book.myLibrary[index].read = false;
-    }
-    console.log(this.book.myLibrary);
-  }
-
-  #removeCard(event) {
-    const element = event.srcElement;
-    const parentElement = element.parentNode.parentNode;
-    const index = parentElement.querySelector(".index").innerHTML;
-
-    parentElement.remove();
-    this.book.myLibrary[index] = "";
-    console.log(this.book.myLibrary);
-  }
-
-  #addListeners = () => {
-    // to toggle read or not read status of a book
-    for (button of this.toggleReadButtons) {
-      button.addEventListener("click", this.#toggleRead);
-    }
-
-    // to remove book
-    for (button of this.removeBookButtons) {
-      button.addEventListener("click", this.#removeCard);
-    }
-  };
+class Card {
+  constructor() {}
 
   // create card
-  createCard() {
+  createCard(book, index) {
+    index = index - 1;
+    const cards = document.querySelector(".cards");
     let read = "";
-    if (this.book.read) {
+    if (book.read) {
       read = "Read";
     } else {
       read = "Not Read";
@@ -210,38 +153,75 @@ class bookCard {
    <div class="card">
      <div class="info">
         <div>Title</div>
-        <div id="title-value">${this.book.title}</div>
+        <div id="title-value">${book.title}</div>
      </div>
      <div class="info">
        <div>Author</div>
-       <div id="author-value">${this.book.author}</div>
+       <div id="author-value">${book.author}</div>
      </div>
      <div class="info">
         <div>Pages</div>
-        <div id="page-value">${this.book.pages}</div>
+        <div id="page-value">${book.pages}</div>
      </div>
      <div class="info">
-       <button class="toggle-read">${this.read}</button>
+       <button class="toggle-read">${read}</button>
      </div>
-        <div class="index" hidden >${this.index}</div>
+        <div class="index" hidden >${index}</div>
          <div class="remove">
          <button>X</button>
          </div>
      
     </div>
    `;
-    this.cards.innerHTML += card;
-    this.#addListeners();
+    cards.innerHTML += card;
+    this.addListeners();
+  }
+
+  addListeners() {
+    // to toggle read or not read status of a book
+    const toggleReadButtons = document.querySelectorAll(".toggle-read");
+    for (let button of toggleReadButtons) {
+      button.addEventListener("click", this.toggleRead);
+    }
+
+    // to remove book
+    const removeBookButtons = document.querySelectorAll(".remove");
+    for (let button of removeBookButtons) {
+      button.addEventListener("click", this.removeCard);
+    }
+  }
+
+  toggleRead(event) {
+    const element = event.srcElement;
+    const parentElement = element.parentNode.parentNode;
+    const index = parentElement.querySelector(".index").innerHTML;
+
+    if (element.innerHTML == "Not Read") {
+      element.innerHTML = "Read";
+      Library.books[index].read = true;
+    } else {
+      element.innerHTML = "Not Read";
+      Library.books[index].read = false;
+    }
+    console.log(Library.books);
+  }
+
+  removeCard(event) {
+    const element = event.srcElement;
+    const parentElement = element.parentNode.parentNode;
+    const index = parentElement.querySelector(".index").innerHTML;
+
+    parentElement.remove();
+    Library.books[index] = "";
+    console.log(Library.books);
   }
 }
 
-
-class Controller{
-    constructor() {
-        this.modal = new bookModal();
-        this.book = new Book(this.modal.getData());
-        // this.bookCard = new bookCard(this.book);
-    }
+class Controller {
+  constructor() {
+    new bookModal();
+  }
 }
 
 new Controller();
+// new bookModal();
